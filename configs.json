@@ -1,0 +1,8 @@
+[
+  {
+    "hostname": "github.com",
+    "totpId": "github/risentveber",
+    "totpElementSelector": "#app_totp",
+    "submitFormSelector": ".authentication form"
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "icons": {
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "name": "yubikey chrome extension",
+  "version": "1.0",
+  "description": "Sets yubikey code in form",
+  "permissions": ["activeTab", "notifications"],
+  "host_permissions": ["http://localhost:9999/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["configs.json"],
+      "extension_ids": ["*"],
+      "matches": ["*://*/*"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "js": ["script.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
