@@ -37,7 +37,9 @@ const server = http.createServer(
       return;
     }
 
-    exec(`ykman oath accounts code -s ${totpId}`, (error, stdout) => {
+    const totpIdSanitized = totpId.replace(/[^0-9a-zA-Z@./-_]/g, "")
+
+    exec(`ykman oath accounts code -s ${totpIdSanitized}`, (error, stdout) => {
       if (error) {
         res.statusCode = 500;
         if (error.message.includes("Touch account timed out")) {
