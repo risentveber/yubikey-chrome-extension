@@ -1,6 +1,7 @@
 const http = require("http");
 const url = require("url");
 const { exec } = require("child_process");
+const fs = require('fs');
 
 const hostname = process.env.HOST || "localhost";
 const port = process.env.PORT || 9999;
@@ -18,10 +19,15 @@ function logError(msg) {
   console.error(`[${new Date().toISOString()}][ERROR] ${msg}`);
 }
 
+const allowedOrigins = JSON.parse(fs.readFileSync('configs.json', 'utf8')).map(item => "https://" +item.hostname)
+
 const server = http.createServer(
   { keepAlive: false, keepAliveTimeout: 0 },
   (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    }
     if (req.method === "OPTIONS") {
       res.end();
       return;
@@ -37,7 +43,7 @@ const server = http.createServer(
       return;
     }
 
-    const totpIdSanitized = totpId.replace(/[^0-9a-zA-Z@./-_]/g, "")
+    const totpIdSanitized = totpId.replace(/[^0-9a-zA-Z@./_\-]/g, "")
 
     exec(`ykman oath accounts code -s ${totpIdSanitized}`, (error, stdout) => {
       if (error) {

@@ -1,4 +1,5 @@
 #!/bin/bash
 
 dir=$(dirname -- "$0")
-nohup node $dir/server.js &
+cd $dir
+nohup node ./server.js &
